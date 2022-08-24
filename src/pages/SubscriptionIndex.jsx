@@ -1,25 +1,11 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import Subscriptions from "../components/Subscriptions";
 import {Link} from 'react-router-dom'
+import useGetSubscriptions from "../hooks/useGetSubscriptions";
 
 function SubscriptionIndex(){
-  const [subscription,setSubscription]=useState([]);
-
-  const getData = async() =>{
-  try{
-      const res=await axios.get(`http://localhost:3000/subscriptions.json`)
-      setSubscription(res.data)
-    }catch(error){
-        alert(error.message);
-    }
-  }
-  useEffect(()=>{
-    getData()
-  },[])
-  
+  const [subscription,error] = useGetSubscriptions()
   return (<>
-  
+  {error ? <div className="text-center alert">{error}</div> :
   <div className="container">
     <h1 className="text-center">Listing Subscriptions</h1>
     <table className="table">
@@ -28,14 +14,14 @@ function SubscriptionIndex(){
         <th>Plan</th>
         <th>Monthly Fee</th>
       </tr>
-    {subscription.map((s)=>
-      <Subscriptions 
-      buyer={s.buyer.name} plan={s.plan.name} monthlyFee={s.plan.monthly_fee}
-      />
-    )}
+      {subscription.map((s)=>
+        <Subscriptions 
+        buyer={s.buyer.name} plan={s.plan.name} monthlyFee={s.plan.monthly_fee}
+        />
+      )}
     </table>
     <Link to={`/`} className="btn btn-success">Back</Link>
-    </div>
+  </div>}
   </>);
 }
 export default SubscriptionIndex;

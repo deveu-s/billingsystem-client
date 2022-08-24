@@ -1,7 +1,6 @@
 import Features from "./Features"
 import {Link} from 'react-router-dom'
 
-
 function Plan({plan,monthlyFee,features}){
 	return <>
     <div class="container">
@@ -22,7 +21,7 @@ function Plan({plan,monthlyFee,features}){
           <th>Max limit</th>
         </tr>
       {features?.map((val)=>
-        <Features featureName={val.name} code={val.code} unitPrice={val.unit_price} maxUnitLimit={val.max_unit_limit}/>
+        <Features key={val.id} featureName={val.name} code={val.code} unitPrice={val.unit_price} maxUnitLimit={val.max_unit_limit}/>
       )}
       </table>
       <Link to={`/`} className="btn btn-success">Back</Link>

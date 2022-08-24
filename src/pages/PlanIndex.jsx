@@ -1,33 +1,21 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import Plans from "../components/Plans";
 import {Link} from 'react-router-dom'
+import useGetPlans from "../hooks/useGetPlans";
 
 function PlanIndex(){
-  const [plan,setPlan]=useState([]);
-  const getData = async() =>{
-    try{
-        const res = await axios.get(`http://localhost:3000/plans.json`)
-        setPlan(res.data)
-      }catch(error){
-          alert(error.message);
-    }
-
-  }
-  useEffect(()=>{
-      getData()
-  },[])
+  const [plan,error] = useGetPlans()
 
   return (<>
-  <div className="row">
+  {error ? <div className="text-center alert">{error}</div> :<div className="row">
   {plan.map((p)=>
     <Plans 
+    key={p.id}
       id={p?.id}
       planName={p.name}
       monthlyFee={p.monthly_fee}
     />
   )}
-  </div>
+  </div>}
   <Link to={`/subscriptions`} className="btn btn-secondary">Subscriptions</Link>
   </>);
 }
